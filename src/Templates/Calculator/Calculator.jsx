@@ -72,7 +72,8 @@ const reducer = (state, {type, payload}) => {
                 operation: null,
                 currentOperand: calculate(state)
             }
-
+        default:
+            return state
     }
 }
 
@@ -93,6 +94,8 @@ const calculate = ({currentOperand, prevOperand, operation}) => {
         case '+':
             result = previous + current
             break
+        default:
+            return
     }
     return result.toString()
 }
