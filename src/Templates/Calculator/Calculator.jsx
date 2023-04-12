@@ -97,11 +97,22 @@ const calculate = ({currentOperand, prevOperand, operation}) => {
     return result.toString()
 }
 
+const maskNumber = (number) => {
+    if (number == null) return
+    const [integer, decimal] = number.split('.')
+    if (decimal == null) {
+        return FORMATTER.format(integer)
+    }
+    return `${FORMATTER.format(integer)}.${decimal}`
+}
+
+const FORMATTER = new Intl.NumberFormat("en-us", {maximumFractionDigits: 0,})
+
 const Calculator = () => {
     const [{currentOperand, prevOperand, operation}, dispatch] = useReducer(reducer, {});
 
     return <div className="flex flex-col items-center justify-start p-4 bg-white rounded-xl w-full max-w-[500px] select-none">
-        <CalculatorMonitor currentOperand={currentOperand} prevOperand={prevOperand} operation={operation}/>
+        <CalculatorMonitor currentOperand={maskNumber(currentOperand)} prevOperand={maskNumber(prevOperand)} operation={operation}/>
         <div className="grid grid-cols-4 gap-4 w-full">
             <button
                 onClick={() => dispatch({type: ACTIONS.CLEAR})}
@@ -126,11 +137,11 @@ const Calculator = () => {
             <NumberButton number={2} dispatch={dispatch}/>
             <NumberButton number={3} dispatch={dispatch}/>
             <OperationButton operation={'+'} dispatch={dispatch}/>
-            <NumberButton number={0} dispatch={dispatch}/>
+            <NumberButton customClasses={'col-span-2'} number={0} dispatch={dispatch}/>
             <NumberButton number={'.'} dispatch={dispatch}/>
             <button
                 onClick={() => dispatch({type: ACTIONS.CALCULATE})}
-                className="col-span-2 flex item-center justify-center bg-green-500 hover:bg-green-600 p-4 rounded-[10px] text-xl">
+                className="flex item-center justify-center bg-green-500 hover:bg-green-600 p-4 rounded-[10px] text-xl">
                 =
             </button>
         </div>
