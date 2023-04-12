@@ -102,7 +102,7 @@ const calculate = ({currentOperand, prevOperand, operation}) => {
 
 const maskNumber = (number) => {
     if (number == null) return
-    const [integer, decimal] = number.split('.')
+    const [integer, decimal] = number.toString().split('.')
     if (decimal == null) {
         return FORMATTER.format(integer)
     }
@@ -114,7 +114,7 @@ const FORMATTER = new Intl.NumberFormat("en-us", {maximumFractionDigits: 0,})
 const Calculator = () => {
     const [{currentOperand, prevOperand, operation}, dispatch] = useReducer(reducer, {});
 
-    return <div className="flex items-center justify-center w-full h-[calc(100vh-156px)]">
+    return <div className="flex items-center justify-center w-full h-[calc(100vh-165px)]">
         <div className="flex flex-col items-center justify-start p-4 bg-white rounded-xl w-full max-w-[500px] select-none ">
             <CalculatorMonitor currentOperand={maskNumber(currentOperand)} prevOperand={maskNumber(prevOperand)} operation={operation}/>
             <div className="grid grid-cols-4 gap-4 w-full">
