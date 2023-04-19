@@ -21,6 +21,11 @@ const reducer = (state, {type, payload}) => {
                     currentOperand: payload.number
                 }
             }
+            if (payload.number === '.' && !state.currentOperand) return {
+                ...state,
+                overwrite: false,
+                currentOperand: '0.'
+            };
             if (payload.number === '.' && state.currentOperand.includes('.')) return state;
             if (state.currentOperand === '0' && payload.number === '0') return state;
             return {
@@ -78,7 +83,7 @@ const reducer = (state, {type, payload}) => {
 }
 
 const calculate = ({currentOperand, prevOperand, operation}) => {
-    const current = +currentOperand
+    const current = currentOperand === '0.' || +currentOperand
     const previous = +prevOperand
     let result = ''
     switch (operation) {
@@ -128,19 +133,11 @@ const Calculator = () => {
                     className="flex item-center justify-center bg-gray-300 hover:bg-gray-400 p-4 rounded-[10px] text-xl">
                     C
                 </button>
-                <OperationButton operation={'/'} dispatch={dispatch}/>
-                <NumberButton number={7} dispatch={dispatch}/>
-                <NumberButton number={8} dispatch={dispatch}/>
-                <NumberButton number={9} dispatch={dispatch}/>
-                <OperationButton operation={'*'} dispatch={dispatch}/>
-                <NumberButton number={4} dispatch={dispatch}/>
-                <NumberButton number={5} dispatch={dispatch}/>
-                <NumberButton number={6} dispatch={dispatch}/>
-                <OperationButton operation={'-'} dispatch={dispatch}/>
-                <NumberButton number={1} dispatch={dispatch}/>
-                <NumberButton number={2} dispatch={dispatch}/>
-                <NumberButton number={3} dispatch={dispatch}/>
-                <OperationButton operation={'+'} dispatch={dispatch}/>
+                {['/', 7, 8, 9, '*', 4, 5, 6, '-', 1, 2, 3, '+'].map(el =>
+                    typeof el === 'number'
+                        ? <NumberButton key={el} number={el} dispatch={dispatch} />
+                        : <OperationButton key={el} operation={el} dispatch={dispatch} />
+                )}
                 <NumberButton customClasses={'col-span-2'} number={0} dispatch={dispatch}/>
                 <NumberButton number={'.'} dispatch={dispatch}/>
                 <button
